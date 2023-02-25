@@ -31,7 +31,7 @@ function PaymentDialog(props) {
     const [successed, setSuccesssed] = useState(false);
     const [payment, setPayment] = useState({
         id: '1',
-        date: '12/11/2022',
+        date: new Date().toISOString(),
         sender: '',
         receiver: '',
         amount: '0',
@@ -39,20 +39,16 @@ function PaymentDialog(props) {
         memo: ''
     })
 
-    console.log(payment);
-
-
     useEffect(() => {
             axios.get('http://localhost:8080/users')
                 .then((response) => {
-                    console.log(response.data);
                     setUsers(response.data.data);
                 });
         }
         , [])
 
 
-    const handleChangeCurrency = (event, field) => {
+    const handleChangeAttribute = (event, field) => {
         console.log(event);
         payment[field] = event;
         payment['id'] = Math.random().toString()
@@ -82,7 +78,7 @@ function PaymentDialog(props) {
                         id="demo-simple-select"
                         label="Sender"
                         value={payment.sender}
-                        onChange={(event) => handleChangeCurrency(event.target.value, 'sender')}
+                        onChange={(event) => handleChangeAttribute(event.target.value, 'sender')}
                     >
                         {users.map((user) => (
                             <MenuItem value={user}>{user["name"]}</MenuItem>
@@ -97,7 +93,7 @@ function PaymentDialog(props) {
                         id="demo-simple-select"
                         label="Receiver"
                         value={payment.receiver}
-                        onChange={(event) => handleChangeCurrency(event.target.value, 'receiver')}
+                        onChange={(event) => handleChangeAttribute(event.target.value, 'receiver')}
                     >
                         {users.map((user) => (
                             <MenuItem value={user}>{user["name"]}</MenuItem>
@@ -111,7 +107,7 @@ function PaymentDialog(props) {
                         id="demo-simple-select"
                         label="Currency"
                         value={payment.currency}
-                        onChange={(event) => handleChangeCurrency(event.target.value, 'currency')}
+                        onChange={(event) => handleChangeAttribute(event.target.value, 'currency')}
                     >
                         {CURRENCIES.map((currency) => (
                             <MenuItem value={currency}>{currency}</MenuItem>
@@ -124,15 +120,15 @@ function PaymentDialog(props) {
                             label="Date desktop"
                             inputFormat="MM/DD/YYYY"
                             value={payment.date}
-                            onChange={(event) => handleChangeCurrency(event.toISOString(), 'date')}
+                            onChange={(event) => handleChangeAttribute(event.toISOString(), 'date')}
                             renderInput={(params) => <TextField {...params} />}
                         />
                     </Stack>
                 </LocalizationProvider>
-                <TextField value={payment.memo} onChange={(event) => handleChangeCurrency(event.target.value, 'memo')}
+                <TextField value={payment.memo} onChange={(event) => handleChangeAttribute(event.target.value, 'memo')}
                            placeholder={'Memo'}></TextField>
                 <TextField value={payment.amount}
-                           onChange={(event) => handleChangeCurrency(`${event.target.value}`, 'amount')}
+                           onChange={(event) => handleChangeAttribute(`${event.target.value}`, 'amount')}
                            placeholder={'Amount'} type="number"></TextField>
 
 

@@ -19,16 +19,20 @@ function PaymentsTable() {
     const [payments, setPayments] = useState([]);
     const [openDialog, setOpenDialog] = useState(false);
     const [searchValue, setSearchValue] = useState('');
+    const [serverPayment,setServerPayment] = useState(null);
 
     const savePayment = (payment) => {
-        localStorage.setItem('payments', JSON.stringify([...payments, payment]));
+        let clientPayments = payments.filter(p => p?.id?.localeCompare(serverPayment?.id));
+        localStorage.setItem('payments', JSON.stringify([...clientPayments, payment]));
         setOpenDialog(false)
     }
 
     useEffect(() => {
             axios.get('http://localhost:8080/payments')
                 .then((response) => {
-                    setPayments([...JSON.parse(localStorage.getItem('payments'))]);
+                    let localElems = localStorage.getItem('payments') || '[]';
+                    setPayments([...response.data.data,...JSON.parse(localElems)]);
+                    setServerPayment(response.data.data[0])
                 });
         }
         , [openDialog])
@@ -39,7 +43,8 @@ function PaymentsTable() {
 
     const filterPayment = (elem) => {
         return elem.sender["name"].toLowerCase().includes(searchValue.toLowerCase()) || elem.receiver["name"].toLowerCase().includes(searchValue.toLowerCase())
-            || elem.amount.toString().includes(searchValue) || elem.currency.toLowerCase().includes(searchValue.toLowerCase());
+            || elem.amount.toString().includes(searchValue) || elem.currency.toLowerCase().includes(searchValue.toLowerCase())
+            || elem.date.toString().includes(searchValue.toLowerCase());
     }
 
     return (
