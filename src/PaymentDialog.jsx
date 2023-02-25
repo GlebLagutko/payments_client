@@ -8,15 +8,15 @@ import {
     DialogContent,
     DialogTitle,
     FormControl,
-    Input,
     InputLabel,
     MenuItem,
-    Select, Stack,
+    Select,
+    Stack,
     TextField
 } from "@mui/material";
 
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
+import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
 import {DesktopDatePicker} from "@mui/x-date-pickers";
 
 const CURRENCIES = ['BTC', 'GBP', 'EUR', 'JPY', 'USD'];
@@ -61,7 +61,7 @@ function PaymentDialog(props) {
     }
 
     const checkPayment = () => {
-        axios.post('http://localhost:8080/payments', payment).then((res)=>{
+        axios.post('http://localhost:8080/payments', payment).then((res) => {
             setSuccesssed(true)
         }).catch(
             (response) => {
@@ -124,15 +124,16 @@ function PaymentDialog(props) {
                             label="Date desktop"
                             inputFormat="MM/DD/YYYY"
                             value={payment.date}
-                            onChange={(event)=> handleChangeCurrency(event.toISOString(), 'date')}
+                            onChange={(event) => handleChangeCurrency(event.toISOString(), 'date')}
                             renderInput={(params) => <TextField {...params} />}
                         />
                     </Stack>
                 </LocalizationProvider>
-                    <TextField value={payment.memo} onChange={(event) => handleChangeCurrency(event.target.value, 'memo')}
-                    placeholder={'Memo'}></TextField>
-                    <TextField value={payment.amount} onChange={(event) => handleChangeCurrency(`${event.target.value}`, 'amount')}
-                    placeholder={'Amount'} type="number"></TextField>
+                <TextField value={payment.memo} onChange={(event) => handleChangeCurrency(event.target.value, 'memo')}
+                           placeholder={'Memo'}></TextField>
+                <TextField value={payment.amount}
+                           onChange={(event) => handleChangeCurrency(`${event.target.value}`, 'amount')}
+                           placeholder={'Amount'} type="number"></TextField>
 
 
             </DialogContent>
